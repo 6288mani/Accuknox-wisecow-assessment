@@ -28,7 +28,14 @@ jobs:
     - name: Push Docker image
       run: docker push wisecow-app:latest
 
-      env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG }}
-        run: kubectl apply -f wisecow-deployment.yml
-             kubectl apply-f wisecow-service.yml
+    - name: Set up Kubeconfig
+      run: |
+        echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+
+    - name: Verify kubectl configuration
+      run: kubectl config view
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f k8s/wisecow-deployment.yaml
+        kubectl apply -f k8s/wisecow-service.yaml
