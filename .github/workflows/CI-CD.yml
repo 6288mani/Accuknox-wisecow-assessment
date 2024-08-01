@@ -26,10 +26,10 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
     - name: Build Docker image
-      run: docker build -t $REGISTRY_USERNAME/wisecow-app .
+      run: docker build -t ${{ secrets.REGISTRY_USERNAME }}/wisecow-app .
 
     - name: Push Docker image
-      run: docker push $REGISTRY_USERNAME/wisecow-app:latest
+      run: docker push ${{ secrets.REGISTRY_USERNAME }}/wisecow-app:latest
 
   deploy:
     needs: build
