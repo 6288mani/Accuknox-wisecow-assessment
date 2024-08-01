@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-
-env:
-  KUBECONFIG: ${{ secrets.KUBECONFIG }}
   
 jobs:
   build:
@@ -31,7 +28,35 @@ jobs:
     - name: Push Docker image
       run: docker push ${{ secrets.REGISTRY_USERNAME }}/wisecow-app:latest
 
-    - name: Deploy to k8s
+  deploy:
+
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v2
+      with:
+        version: 'latest'
+
+    - name: Set kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
+      env:
+        KUBECONFIG: ${{ secrets.KUBECONFIG }}
+
+    - name: Set Kubernetes context
       uses: azure/k8s-set-context@v1
       with:
-        kubeconfig: ${{ secrets.KUBE_CONFIG }}
+        method: set
+        context: ${{ secrets.KUBECONTEXT }}
+      env:
+        KUBECONFIG: $HOME/.kube/config
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f kubernetes/
