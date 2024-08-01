@@ -31,7 +31,7 @@ jobs:
     - name: Set up Kubeconfig
       run: |
         mkdir -p $HOME/.kube
-        echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+        echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
 
     - name: Verify kubectl configuration
       run: kubectl config view
