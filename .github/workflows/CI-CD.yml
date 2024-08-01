@@ -30,6 +30,7 @@ jobs:
 
     - name: Set up Kubeconfig
       run: |
+        mkdir -p $HOME/.kube
         echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
     - name: Verify kubectl configuration
