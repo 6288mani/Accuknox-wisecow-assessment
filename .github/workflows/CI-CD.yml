@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Deploy to Kubernetes
         run: |
-          kubectl apply -f wisecow-deployment.yml
-          kubectl apply -f wisecow-service.yml
+          kubectl apply -f k8s/wisecow-deployment.yml
+          kubectl apply -f k8s/wisecow-service.yml
         env:
           KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
