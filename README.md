@@ -31,11 +31,11 @@
             # Define the command to run the script
             CMD ["./script.sh"]
 
-      3. Build the Docker image:
+   3. Build the Docker image:
 
             docker build -t wisecow-app .
 
-      4. Test the Docker image locally:
+   4. Test the Docker image locally:
 
             docker run -p 4499:4499 wisecow-app
          
