@@ -4,7 +4,7 @@
 
 2. Write Dockerfile:
 
-   *# Use a base image, for example, Ubuntu
+   **# Use a base image, for example, Ubuntu
      FROM ubuntu:latest
 
     #The `<<EOF ... EOF` syntax is known as a "here document" and allows you to run multiple commands in one `RUN` instruction.
