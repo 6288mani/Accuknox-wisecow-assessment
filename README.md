@@ -4,11 +4,11 @@
 
 2. Write Dockerfile:
 
-  *# Use a base image, for example, Ubuntu
+   *# Use a base image, for example, Ubuntu
      FROM ubuntu:latest
 
-   #The `<<EOF ... EOF` syntax is known as a "here document" and allows you to run multiple commands in one `RUN` instruction.
-   #It’s used to avoid creating multiple layers and can help in managing complex build instructions
+    #The `<<EOF ... EOF` syntax is known as a "here document" and allows you to run multiple commands in one `RUN` instruction.
+    #It’s used to avoid creating multiple layers and can help in managing complex build instructions
     RUN <<EOF
     apt-get update -y
     apt-get install fortune-mod cowsay -y \
@@ -23,7 +23,6 @@
     sleep 5
     chmod 755 script.sh
     EOF
-
     # Expose port 4499
     EXPOSE 4499
 
