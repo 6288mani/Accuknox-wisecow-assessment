@@ -1,10 +1,10 @@
 # Accuknox-wisecow-assessment
 # Dockerization
-1. Clone the repository git clone https://github.com/nyrahul/wisecow
+   1. Clone the repository git clone https://github.com/nyrahul/wisecow
 
-2. Write Dockerfile:
+   2. Write Dockerfile:
 
-         # Use a base image, for example, Ubuntu
+                  # Use a base image, for example, Ubuntu
          FROM ubuntu:latest
 
          #The `<<EOF ... EOF` syntax is known as a "here document" and allows you to run multiple commands in one `RUN` instruction.
@@ -31,13 +31,15 @@
          # Define the command to run the script
          CMD ["./script.sh"]
 
-Build the Docker image:
+# Build the Docker image:
 
-docker build -t wisecow-app .
-Test the Docker image locally:
+         docker build -t wisecow-app .
+         
+# Test the Docker image locally:
 
-docker run -p 8080:80 wisecow-app
-Kubernetes Deployment
+         docker run -p 4499:4499 wisecow-app
+         
+# Kubernetes Deployment
 Create Deployment YAML (wisecow-deployment.yaml):
 apiVersion: apps/v1
 kind: Deployment
