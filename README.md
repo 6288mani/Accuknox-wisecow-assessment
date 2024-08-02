@@ -41,7 +41,8 @@
          
 # Kubernetes Deployment
    1. Create Deployment YAML (wisecow-deployment.yaml):
-             apiVersion: apps/v1
+      
+      *      apiVersion: apps/v1
              kind: Deployment
              metadata:
                name: wisecow-deployment
@@ -64,7 +65,8 @@
                  - containerPort: 4499
       
    2. Create Service YAML (wisecow-service.yaml):
-              apiVersion: v1
+      
+      *       apiVersion: v1
               kind: Service
               metadata:
                 name: wisecow-service
@@ -79,8 +81,8 @@
 
    3. Apply the manifest files:
 
-                kubectl apply -f wisecow-deployment.yaml
-                kubectl apply -f wisecow-service.yaml
+      *   kubectl apply -f wisecow-deployment.yaml
+          kubectl apply -f wisecow-service.yaml
 
 # Continuous Integration and Deployment (CI/CD)
 
