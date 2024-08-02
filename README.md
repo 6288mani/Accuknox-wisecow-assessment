@@ -81,8 +81,8 @@
 
    3. Apply the manifest files:
 
-      *   kubectl apply -f wisecow-deployment.yaml
-          kubectl apply -f wisecow-service.yaml
+      *         kubectl apply -f wisecow-deployment.yaml
+                kubectl apply -f wisecow-service.yaml
 
 # Continuous Integration and Deployment (CI/CD)
 
