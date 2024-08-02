@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-APPLICATION_URL="${{secreats.URL_CONFIG}}"   # URL of the application to check
+APPLICATION_URL="${{ secrets.URL_CONFIG }}"   # URL of the application to check
 EXPECTED_STATUS_CODE=200                           # Expected HTTP status code for 'up' status
 LOG_FILE="/var/log/application_uptime.log"          # Log file to record the status
 DATE=$(date +"%Y-%m-%d %H:%M:%S")
