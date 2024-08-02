@@ -4,7 +4,7 @@
 
 2. Write Dockerfile:
 
-     **# Use a base image, for example, Ubuntu
+    * **# Use a base image, for example, Ubuntu
        FROM ubuntu:latest
 
       #The `<<EOF ... EOF` syntax is known as a "here document" and allows you to run multiple commands in one `RUN` instruction.
@@ -23,9 +23,9 @@
       sleep 5
       chmod 755 script.sh
       EOF
-     **# Expose port 4499
+    * **# Expose port 4499
       EXPOSE 4499
-      **# Define the command to run the script
+    *  **# Define the command to run the script
       CMD ["./script.sh"]
 
 Build the Docker image:
