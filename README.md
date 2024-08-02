@@ -41,40 +41,40 @@
          
 # Kubernetes Deployment
    1. Create Deployment YAML (wisecow-deployment.yaml):
-            apiVersion: apps/v1
-            kind: Deployment
-            metadata:
-              name: wisecow-deployment
-              labels:
-                app: wisecow
-            spec:
-              replicas: 1
-              selector:
-                matchLabels:
-                  app: wisecow
-            template:
-              metadata:
-                labels:
-                  app: wisecow
-            spec:
-              containers:
-              - name: wisecow
-                image: ${{ secrets.REGISTRY_USERNAME }}/wisecow-app:latest
-                ports:
-                - containerPort: 4499
+      *      apiVersion: apps/v1
+             kind: Deployment
+             metadata:
+               name: wisecow-deployment
+               labels:
+                 app: wisecow
+             spec:
+               replicas: 1
+               selector:
+                 matchLabels:
+                   app: wisecow
+             template:
+               metadata:
+                 labels:
+                   app: wisecow
+             spec:
+               containers:
+               - name: wisecow
+                 image: ${{ secrets.REGISTRY_USERNAME }}/wisecow-app:latest
+                 ports:
+                 - containerPort: 4499
       
    2. Create Service YAML (wisecow-service.yaml):
-            apiVersion: v1
-            kind: Service
-            metadata:
-              name: wisecow-service
-            spec:
-              selector:
-                app: wisecow
-              ports:
-              - protocol: TCP
-                port: 80
-                targetPort: 4499
+             apiVersion: v1
+             kind: Service
+             metadata:
+               name: wisecow-service
+             spec:
+               selector:
+                 app: wisecow
+               ports:
+               - protocol: TCP
+                 port: 80
+                 targetPort: 4499
                type: LoadBalancer
 
    3. Apply the manifest files:
