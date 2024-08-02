@@ -85,7 +85,9 @@
 # Continuous Integration and Deployment (CI/CD)
 
    1. GitHub Actions Workflow:
+
    * Create .github/workflows/ci-cd.yml:
+     
             name: End to End CI/CD workflow
             on:
               push:
