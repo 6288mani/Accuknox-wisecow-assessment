@@ -49,14 +49,8 @@ jobs:
       env:
         KUBECONFIG: ${{ secrets.KUBECONFIG }}
 
-    - name: Set Kubernetes context
-      uses: azure/k8s-set-context@v1
-      with:
-        method: set
-        context: ${{ secrets.KUBECONTEXT }}
-      env:
-        KUBECONFIG: $HOME/.kube/config
 
     - name: Deploy to Kubernetes
       run: |
-        kubectl apply -f kubernetes/
+        kubectl apply -f kubernetes/wisecow-deployment.yml
+        kubectl apply -f kubernetes/wisecow-service.yml
