@@ -27,10 +27,13 @@ jobs:
 
     - name: Push Docker image
       run: docker push ${{ secrets.REGISTRY_USERNAME }}/wisecow-app:latest
-      
-    - name: Deploy to Kubernetes
-      run: |
-        kubectl apply -f wisecow-deployment.yml
-        kubectl apply -f wisecow-service.yml
-      env:
-        KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f wisecow-deployment.yml
+          kubectl apply -f wisecow-service.yml
+        env:
+          KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
