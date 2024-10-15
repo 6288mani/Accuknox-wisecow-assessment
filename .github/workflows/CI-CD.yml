@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Deploy to Kubernetes
         run: |
-          kubectl apply -f Accuknox-wisecow-assessment/wisecow-deployment.yml
-          kubectl apply -f Accuknox-wisecow-assessment/wisecow-service.yml
+          kubectl apply -f problem-statement-2/wisecow-deployment.yml
+          kubectl apply -f problem-statement-2/wisecow-service.yml
         env:
           KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
