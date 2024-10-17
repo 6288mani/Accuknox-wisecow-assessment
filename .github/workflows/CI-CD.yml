@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,6 +28,10 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.REGISTRY_USERNAME }}/wisecow-app:latest
 
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Set up kubectl
         uses: azure/setup-kubectl@v1
         with:
@@ -37,11 +41,16 @@ jobs:
         run: |
           echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig
           export KUBECONFIG=$(pwd)/kubeconfig
-
-      - name: Deploy to Kubernetes
+      
+      - name: Verify Kubernetes Context
         run: |
-          kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
+          kubectl config get-contexts
+          kubectl cluster-info
+          
+      # - name: Deploy to Kubernetes
+      #   run: |
+      #     kubectl apply -f k8s/deployment.yaml
+      #     kubectl apply -f k8s/service.yaml
 
 
 # name: End to End CI/CD workflow for wisecow application by Accuknox Assessment
