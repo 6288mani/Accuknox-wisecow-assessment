@@ -43,6 +43,7 @@ jobs:
     # Set up kubeconfig from GitHub Secrets
     - name: Set kubeconfig
       run: |
+          mkdir -p $HOME/.kube
           echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
 
     # Verify kubectl is working
