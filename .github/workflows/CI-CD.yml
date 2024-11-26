@@ -36,6 +36,10 @@ jobs:
       uses: tale/kubectl-action@v1
       with:
         base64-kube-config: ${{ secrets.KUBECONFIG }}
-    - run: |
+    - name: Set Minikube Context
+      run: kubectl config use-context minikube
+
+    - name: Final Deployment
+      run: |
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
