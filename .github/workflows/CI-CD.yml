@@ -55,23 +55,6 @@ jobs:
       - name: List all services for debugging
         run: kubectl get svc
 
-      - name: Wait for LoadBalancer external IP
-        run: |
-          EXTERNAL_IP=""
-          # Wait for the EXTERNAL-IP to be assigned
-          while [ -z "$EXTERNAL_IP" ]; do
-            echo "Waiting for external IP..."
-            EXTERNAL_IP=$(kubectl get svc wisecow -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
-            if [ -z "$EXTERNAL_IP" ]; then
-              sleep 10
-            fi
-          done
-          echo "External IP assigned: $EXTERNAL_IP"
-          echo "EXTERNAL_IP=$EXTERNAL_IP" >> $GITHUB_ENV
+      - name: List all Pods for debugging
+        run: kubectl get pods
 
-      - name: Use External IP
-        run: |
-          # Now you can use the EXTERNAL_IP variable in your workflow
-          echo "Using External IP: ${{ env.EXTERNAL_IP }}"
-          # Example: curl the service or run some other action
-          curl http://${{ env.EXTERNAL_IP }}:4499
