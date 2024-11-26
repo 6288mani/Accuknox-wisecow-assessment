@@ -40,11 +40,20 @@ jobs:
       with:
         kubectl-version: 'latest'
 
-    - name: Start Minikube
-      run: minikube start --driver=docker
+    # Set up kubeconfig from GitHub Secrets
+    - name: Set kubeconfig
+      run: |
+          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
 
-    - name: Set kubectl context
-      run: kubectl config use-context minikube
+    # Verify kubectl is working
+    - name: Verify kubectl
+      run: kubectl version --client
+
+    # - name: Start Minikube
+    #   run: minikube start --driver=docker
+
+    # - name: Set kubectl context
+    #   run: kubectl config use-context minikube
 
     - name: Apply Kubernetes Deployment
       run: |
