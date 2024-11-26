@@ -57,7 +57,7 @@ jobs:
 
       - name: Install unzip
         run: |
-          echo'sudo apt-get install unzip -y'
+          sudo apt-get install unzip -y
         
       # Install AWS CLI
       - name: Install AWS CLI
