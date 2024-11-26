@@ -51,6 +51,17 @@ jobs:
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
       working-directory: ./  # Ensure you're running this from the root or correct directory
+
+    - name: Wait for Pod to be Ready
+      run: |
+        # Loop until the pod is ready
+        while true; do
+          # Check if the pod is ready
+          kubectl get pods -l app=wisecow -o=jsonpath='{.items[0].status.conditions[?(@.type=="Ready")].status}' | grep -q "True" && break
+          echo "Waiting for pod to be ready..."
+          sleep 10  # Wait for 10 seconds before checking again
+        done
+        echo "Pod is ready!"
       
     - name: Port-forward the service
       run: |
