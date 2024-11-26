@@ -51,4 +51,10 @@ jobs:
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
       working-directory: ./  # Ensure you're running this from the root or correct directory
+      
+    - name: Port-forward the service
+      run: |
+        kubectl port-forward service/wisecow-service 4499:80 &
+        sleep 10  # Give it some time for the port-forward to establish
+        curl http://localhost:4499
 
