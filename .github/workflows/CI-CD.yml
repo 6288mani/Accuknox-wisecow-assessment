@@ -57,16 +57,19 @@ jobs:
             kubectl apply -f k8s/deployment.yaml
             kubectl apply -f k8s/service.yaml
         working-directory: ./  # Ensure you're running this from the root or correct directory
-        
-      - name: Get the URL of the deployed application
-        run: |
-          # Get the service name based on the label selector (e.g., app=wisecow)
-          SERVICE_NAME=$(kubectl get svc -l app=wisecow -o jsonpath='{.items[0].metadata.name}')
-          echo "Service name found: $SERVICE_NAME"
 
-          # Get the URL of the deployed service
-          SERVICE_URL=$(kubectl get svc $SERVICE_NAME -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-          echo "Service is available at: http://${SERVICE_URL}"
+      - name: List all services for debugging
+        run: kubectl get svc  
+        
+      # - name: Get the URL of the deployed application
+      #   run: |
+      #     # Get the service name based on the label selector (e.g., app=wisecow)
+      #     SERVICE_NAME=$(kubectl get svc -l app=wisecow -o jsonpath='{.items[0].metadata.name}')
+      #     echo "Service name found: $SERVICE_NAME"
+
+      #     # Get the URL of the deployed service
+      #     SERVICE_URL=$(kubectl get svc $SERVICE_NAME -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+      #     echo "Service is available at: http://${SERVICE_URL}"
 
     # - name: Wait for Pod to be Ready
     #   run: |
