@@ -54,42 +54,24 @@ jobs:
 
       - name: List all services for debugging
         run: kubectl get svc
-        
-      # # Install AWS CLI
-      # - name: Install AWS CLI
-      #   run: |
-      #     sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      #     sudo apt-get install -y unzip
-      #     sudo ./aws/install
 
-      # # Set up AWS CLI to interact with EC2
-      # - name: Set up AWS CLI
-      #   uses: aws-actions/configure-aws-credentials@v1
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: us-east-1  # Replace with your region
-
-      # Automatically get EC2 Instance ID and Elastic IP
-      - name: Get EC2 Instance ID and Elastic IP
-        id: get_ip
+      - name: Wait for LoadBalancer external IP
         run: |
-          # Automatically retrieve the EC2 instance ID
-          EC2_INSTANCE_ID=$(aws ec2 describe-instances \
-            --query "Reservations[0].Instances[?Tags[?Key=='Name']|[0].Value=='YourInstanceName'].InstanceId" \
-            --output text)
+          EXTERNAL_IP=""
+          # Wait for the EXTERNAL-IP to be assigned
+          while [ -z "$EXTERNAL_IP" ]; do
+            echo "Waiting for external IP..."
+            EXTERNAL_IP=$(kubectl get svc wisecow -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
+            if [ -z "$EXTERNAL_IP" ]; then
+              sleep 10
+            fi
+          done
+          echo "External IP assigned: $EXTERNAL_IP"
+          echo "EXTERNAL_IP=$EXTERNAL_IP" >> $GITHUB_ENV
 
-          # Get the Elastic IP associated with the EC2 instance
-          ELASTIC_IP=$(aws ec2 describe-instances \
-            --instance-ids $EC2_INSTANCE_ID \
-            --query 'Reservations[0].Instances[0].PublicIpAddress' \
-            --output text)
-
-          echo "Elastic IP for EC2 Instance ($EC2_INSTANCE_ID): $ELASTIC_IP"
-          echo "ELASTIC_IP=$ELASTIC_IP" >> $GITHUB_ENV
-
-      - name: Use Elastic IP
+      - name: Use External IP
         run: |
-          echo "Using Elastic IP: ${{ env.ELASTIC_IP }}"
+          # Now you can use the EXTERNAL_IP variable in your workflow
+          echo "Using External IP: ${{ env.EXTERNAL_IP }}"
           # Example: curl the service or run some other action
-          curl http://${{ env.ELASTIC_IP }}:4499
+          curl http://${{ env.EXTERNAL_IP }}:4499
