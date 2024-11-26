@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: wisecow
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - port: 4499
       targetPort: 4499
