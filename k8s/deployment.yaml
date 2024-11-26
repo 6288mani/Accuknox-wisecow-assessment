@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: wisecow
-        image: ${{ secrets.REGISTRY_USERNAME }}/wisecow-app:latest
+        image: ${{ secrets.REGISTRY_USERNAME }}/wisecow-app-1:latest
         ports:
         - containerPort: 4499
