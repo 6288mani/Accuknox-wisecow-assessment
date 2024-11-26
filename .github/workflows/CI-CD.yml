@@ -28,27 +28,23 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.REGISTRY_USERNAME }}/wisecow-app:latest
 
-  deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        kubectl-version: 'latest'
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          kubectl-version: 'latest'
 
-    # Set up kubeconfig from GitHub Secrets
-    - name: Set kubeconfig
-      run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+      # Set up kubeconfig from GitHub Secrets
+      - name: Set kubeconfig
+        run: |
+            mkdir -p $HOME/.kube
+            echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
 
-    # Verify kubectl is working
-    - name: Verify kubectl
-      run: kubectl version --client
+     # Verify kubectl is working
+      - name: Verify kubectl
+        run: kubectl version --client
 
     # - name: Start Minikube
     #   run: minikube start --driver=docker
@@ -56,11 +52,11 @@ jobs:
     # - name: Set kubectl context
     #   run: kubectl config use-context minikube
 
-    - name: Apply Kubernetes Deployment
-      run: |
-          kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
-      working-directory: ./  # Ensure you're running this from the root or correct directory
+      - name: Apply Kubernetes Deployment
+        run: |
+            kubectl apply -f k8s/deployment.yaml
+            kubectl apply -f k8s/service.yaml
+        working-directory: ./  # Ensure you're running this from the root or correct directory
 
     # - name: Wait for Pod to be Ready
     #   run: |
