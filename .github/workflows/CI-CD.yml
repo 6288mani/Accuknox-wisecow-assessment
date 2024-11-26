@@ -57,6 +57,10 @@ jobs:
             kubectl apply -f k8s/deployment.yaml
             kubectl apply -f k8s/service.yaml
         working-directory: ./  # Ensure you're running this from the root or correct directory
+      - name: Get the URL of the deployed application
+        run: |
+          export SERVICE_URL=$(kubectl get svc my-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+          echo "Service is available at: http://${SERVICE_URL}"
 
     # - name: Wait for Pod to be Ready
     #   run: |
