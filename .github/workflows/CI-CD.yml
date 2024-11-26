@@ -32,12 +32,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Deploy to Kubernetes Cluster
+    - name: Configuration
       uses: tale/kubectl-action@v1
       with:
         base64-kube-config: ${{ secrets.KUBECONFIG }}
+        
+    - name: Start Minikube
+      run: |
+          minikube start --driver=docker
     - name: Set Minikube Context
       run: kubectl config use-context minikube
+
 
     - name: Final Deployment
       run: |
