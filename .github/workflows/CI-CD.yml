@@ -53,17 +53,13 @@ jobs:
         working-directory: ./  # Ensure you're running this from the root or correct directory
 
       - name: List all services for debugging
-        run: kubectl get svc 
-
-      - name: Install unzip
-        run: |
-          sudo apt-get install unzip -y
+        run: kubectl get svc
         
       # Install AWS CLI
       - name: Install AWS CLI
         run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
+          sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          sudo apt-get install -y unzip
           sudo ./aws/install
 
       # Set up AWS CLI to interact with EC2
