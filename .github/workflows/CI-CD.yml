@@ -58,13 +58,24 @@ jobs:
       # Install unzip (required for extracting AWS CLI installer)
       - name: Install unzip
         run: |
-          # Wait for any other apt-get processes to finish and release the lock
-          while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
-            echo "Waiting for the lock to be released..."
+          # Set a maximum time to wait for the lock to be released (in seconds)
+          MAX_WAIT_TIME=30
+          WAIT_TIME=0
+          while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1 && [ $WAIT_TIME -lt $MAX_WAIT_TIME ]; do
+            echo "Waiting for the lock to be released... (Elapsed: $WAIT_TIME seconds)"
             sleep 5
+            WAIT_TIME=$((WAIT_TIME + 5))
           done
 
-          # Now install unzip
+          # If the lock is still held, forcefully remove it
+          if [ $WAIT_TIME -ge $MAX_WAIT_TIME ]; then
+            echo "Lock not released after $MAX_WAIT_TIME seconds, proceeding with forceful removal."
+            sudo rm -f /var/lib/dpkg/lock-frontend
+            sudo rm -f /var/lib/dpkg/lock
+            sudo dpkg --configure -a
+          fi
+
+          # Install unzip
           sudo apt-get update && sudo apt-get install -y unzip
         
       # Install AWS CLI
