@@ -53,15 +53,25 @@ jobs:
         working-directory: ./  # Ensure you're running this from the root or correct directory
 
       - name: List all services for debugging
-        run: kubectl get svc  
+        run: kubectl get svc 
+        
+      # Install AWS CLI
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
+      # Set up AWS CLI to interact with EC2
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-1  # your region
+          aws-region: us-west-2  # Replace with your region
 
-      - name: Get EC2 Elastic IP
+      # Automatically get EC2 Instance ID and Elastic IP
+      - name: Get EC2 Instance ID and Elastic IP
         id: get_ip
         run: |
           # Automatically retrieve the EC2 instance ID
