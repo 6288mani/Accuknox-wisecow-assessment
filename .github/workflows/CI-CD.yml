@@ -1,4 +1,4 @@
-name: Deploy to Kubernetes
+name: End to End CI/CD workflow for wisecow application by Accuknox Assessment
 
 on:
   push:
@@ -32,86 +32,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v1
-        with:
-          version: 'latest'
-
-      - name: Configure kubectl
+    - name: Deploy to Kubernetes Cluster
+      uses: tale/kubectl-action@v1
+      with:
+        base64-kube-config: ${{ secrets.KUBECONFIG }}
         run: |
-          echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig
-          export KUBECONFIG=$(pwd)/kubeconfig
-      
-      - name: Verify Kubernetes Context
-        run: |
-          kubectl config get-contexts
-          kubectl cluster-info
-          
-      # - name: Deploy to Kubernetes
-      #   run: |
-      #     kubectl apply -f k8s/deployment.yaml
-      #     kubectl apply -f k8s/service.yaml
-
-
-# name: End to End CI/CD workflow for wisecow application by Accuknox Assessment
-
-# on:
-#   push:
-#     branches:
-#       - main
-  
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v3
-
-#     - name: Set up Docker Buildx
-#       uses: docker/setup-buildx-action@v2
-
-#     - name: Log in to Docker Hub
-#       uses: docker/login-action@v2
-#       with:
-#         username: ${{ secrets.REGISTRY_USERNAME }}
-#         password: ${{ secrets.REGISTRY_PASSWORD }}
-
-#     - name: Build Docker image
-#       run: docker build -t ${{ secrets.REGISTRY_USERNAME }}/wisecow-app .
-
-#     - name: Push Docker image
-#       run: docker push ${{ secrets.REGISTRY_USERNAME }}/wisecow-app:latest
-#   deploy:
-#     runs-on: ubuntu-latest
-    
-#     steps:
-#       # Step 4: Set up kubectl
-#       - name: Set up kubectl
-#         uses: azure/setup-kubectl@v1
-#         with:
-#           version: 'latest'
-
-#     # Step 5: Configure kubectl
-#       - name: Configure kubectl
-#         run: |
-#           echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig
-#           export KUBECONFIG=$(pwd)/kubeconfig
-
-#       # # Step 6: Deploy to Kubernetes
-#       # - name: Deploy to Kubernetes
-#       #   run: |
-#       #     kubectl apply -f problem-statement-2/deployment.yaml
-#       #     kubectl apply -f problem-statement-2/service.yaml
-#       #     # kubectl apply -f k8s/ingress.yaml # If you're using Ingress
-
-#       # # Optional: Verify Deployment
-#       # - name: Verify Deployment
-#       #   run: |
-#       #     kubectl rollout status deployment/wisecow
-#       # # - name: Deploy to Kubernetes
-#       # #   run: |
-#       # #     kubectl apply -f problem-statement-2/wisecow-deployment.yml
-#       # #     kubectl apply -f problem-statement-2/wisecow-service.yml
-#       # #   env:
-#       # #     KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
