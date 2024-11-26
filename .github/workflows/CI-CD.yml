@@ -54,7 +54,7 @@ jobs:
       
     - name: Port-forward the service
       run: |
-        kubectl port-forward service/wisecow 4499:80 &
+        kubectl port-forward service/wisecow 4499:4499 &
         sleep 10  # Give it some time for the port-forward to establish
         curl http://localhost:4499
 
