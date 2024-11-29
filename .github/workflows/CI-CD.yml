@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -23,10 +23,10 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.REGISTRY_USERNAME }}/wisecow-app-1 .
+        run: docker build -t ${{ secrets.REGISTRY_USERNAME }}/wisecow-app .
 
       - name: Push Docker image
-        run: docker push ${{ secrets.REGISTRY_USERNAME }}/wisecow-app-1:latest
+        run: docker push ${{ secrets.REGISTRY_USERNAME }}/wisecow-app:latest
 
       - name: Checkout code
         uses: actions/checkout@v2
