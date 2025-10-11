@@ -1,4 +1,4 @@
-name: End to End CI/CD workflow for wisecow application by Accuknox Assessment
+name: End to End CI/CD with Kind Cluster
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,44 +16,27 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.REGISTRY_USERNAME }}/wisecow-app .
-
-      - name: Push Docker image
-        run: docker push ${{ secrets.REGISTRY_USERNAME }}/wisecow-app:latest
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          kubectl-version: 'latest'
-
-      # Set up kubeconfig from GitHub Secrets
-      - name: Set kubeconfig
+      - name: Build and push Docker image
         run: |
-            mkdir -p $HOME/.kube
-            echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+          docker build -t wisecow-app:latest .
+      
+      - name: Install Kind
+        uses: helm/kind-action@v1
+        with:
+          version: v0.22.0
+          wait: 60s
 
-     # Verify kubectl is working
-      - name: Verify kubectl
-        run: kubectl version --client
-
-      - name: Apply Kubernetes Deployment
+      - name: Verify Kubernetes cluster
         run: |
-            kubectl apply -f k8s/deployment.yaml
-            kubectl apply -f k8s/service.yaml
-        working-directory: ./  # Ensure you're running this from the root or correct directory
+          kubectl cluster-info
+          kubectl get nodes
 
-      - name: List all services for debugging
-        run: kubectl get svc
+      - name: Apply Kubernetes manifests
+        run: |
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
 
-      - name: List all Pods for debugging
-        run: kubectl get pods
+      - name: Check pods and services
+        run: |
+          kubectl get pods
+          kubectl get svc
